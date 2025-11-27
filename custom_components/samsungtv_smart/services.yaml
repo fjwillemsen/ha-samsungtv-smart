@@ -31,3 +31,402 @@ set_art_mode:
       selector:
         entity:
           integration: samsungtv_smart
+
+# Frame Art Extended Services
+
+art_get_artmode:
+  name: Get Art Mode Status
+  description: Get the current Art Mode status from Samsung Frame TV.
+  fields:
+    entity_id:
+      name: Entity Name
+      description: Name of the target entity
+      required: true
+      selector:
+        entity:
+          integration: samsungtv_smart
+
+art_set_artmode:
+  name: Set Art Mode Status
+  description: Enable or disable Art Mode on Samsung Frame TV.
+  fields:
+    entity_id:
+      name: Entity Name
+      description: Name of the target entity
+      required: true
+      selector:
+        entity:
+          integration: samsungtv_smart
+    enabled:
+      name: Enabled
+      description: True to enable Art Mode, False to disable
+      required: true
+      example: true
+      selector:
+        boolean:
+
+art_available:
+  name: Get Available Artwork
+  description: Get list of all available artwork on the Samsung Frame TV.
+  fields:
+    entity_id:
+      name: Entity Name
+      description: Name of the target entity
+      required: true
+      selector:
+        entity:
+          integration: samsungtv_smart
+    category_id:
+      name: Category ID
+      description: Optional category filter (MY-C0002 for My Photos, MY-C0004 for Favorites)
+      required: false
+      example: "MY-C0002"
+      selector:
+        text:
+
+art_get_current:
+  name: Get Current Artwork
+  description: Get information about the currently displayed artwork.
+  fields:
+    entity_id:
+      name: Entity Name
+      description: Name of the target entity
+      required: true
+      selector:
+        entity:
+          integration: samsungtv_smart
+
+art_select_image:
+  name: Select Artwork
+  description: Select and display a specific piece of artwork.
+  fields:
+    entity_id:
+      name: Entity Name
+      description: Name of the target entity
+      required: true
+      selector:
+        entity:
+          integration: samsungtv_smart
+    content_id:
+      name: Content ID
+      description: The content ID of the artwork (e.g., SAM-F0206, MY-F0001)
+      required: true
+      example: "SAM-F0206"
+      selector:
+        text:
+    category_id:
+      name: Category ID
+      description: Optional category ID
+      required: false
+      selector:
+        text:
+    show:
+      name: Show Immediately
+      description: If true, immediately display the artwork
+      required: false
+      default: true
+      selector:
+        boolean:
+
+art_upload:
+  name: Upload Artwork
+  description: Upload an image file to the Samsung Frame TV.
+  fields:
+    entity_id:
+      name: Entity Name
+      description: Name of the target entity
+      required: true
+      selector:
+        entity:
+          integration: samsungtv_smart
+    file_path:
+      name: File Path
+      description: Path to the image file to upload
+      required: true
+      example: "/config/www/my_art.jpg"
+      selector:
+        text:
+    matte_id:
+      name: Matte Style
+      description: "Matte style (format: type_color, e.g., modern_apricot, shadowbox_polar)"
+      required: false
+      default: "shadowbox_polar"
+      example: "modern_apricot"
+      selector:
+        text:
+    file_type:
+      name: File Type
+      description: Image file type (png or jpg)
+      required: false
+      default: "jpg"
+      selector:
+        select:
+          options:
+            - "jpg"
+            - "png"
+
+art_delete:
+  name: Delete Artwork
+  description: Delete an uploaded artwork from the TV. Only user-uploaded content (MY-*) can be deleted.
+  fields:
+    entity_id:
+      name: Entity Name
+      description: Name of the target entity
+      required: true
+      selector:
+        entity:
+          integration: samsungtv_smart
+    content_id:
+      name: Content ID
+      description: The content ID to delete (must start with MY-)
+      required: true
+      example: "MY-F0001"
+      selector:
+        text:
+
+art_get_thumbnail:
+  name: Get Artwork Thumbnail
+  description: Get the thumbnail image for a specific piece of artwork.
+  fields:
+    entity_id:
+      name: Entity Name
+      description: Name of the target entity
+      required: true
+      selector:
+        entity:
+          integration: samsungtv_smart
+    content_id:
+      name: Content ID
+      description: The content ID of the artwork
+      required: true
+      example: "SAM-F0206"
+      selector:
+        text:
+
+art_set_brightness:
+  name: Set Art Mode Brightness
+  description: Set the brightness level for Art Mode display.
+  fields:
+    entity_id:
+      name: Entity Name
+      description: Name of the target entity
+      required: true
+      selector:
+        entity:
+          integration: samsungtv_smart
+    brightness:
+      name: Brightness
+      description: Brightness level (typically 0-100)
+      required: true
+      example: 50
+      selector:
+        number:
+          min: 0
+          max: 100
+          step: 1
+
+art_get_brightness:
+  name: Get Art Mode Brightness
+  description: Get the current brightness level for Art Mode display.
+  fields:
+    entity_id:
+      name: Entity Name
+      description: Name of the target entity
+      required: true
+      selector:
+        entity:
+          integration: samsungtv_smart
+
+art_change_matte:
+  name: Change Artwork Matte
+  description: Change the matte/frame style for a piece of artwork.
+  fields:
+    entity_id:
+      name: Entity Name
+      description: Name of the target entity
+      required: true
+      selector:
+        entity:
+          integration: samsungtv_smart
+    content_id:
+      name: Content ID
+      description: The content ID of the artwork
+      required: true
+      selector:
+        text:
+    matte_id:
+      name: Matte ID
+      description: "Matte style ID (format: type_color). Types: none, modernthin, modern, modernwide, shadowboxthin, shadowbox, shadowboxwide, panoramic, flexible. Colors: black, neutral, antique, warm, polar, sand, seafoam, sage, burgandy, navy, apricot, byzantine, lavender, redorange"
+      required: true
+      example: "modern_apricot"
+      selector:
+        text:
+
+art_set_photo_filter:
+  name: Set Photo Filter
+  description: Apply a photo filter effect to artwork.
+  fields:
+    entity_id:
+      name: Entity Name
+      description: Name of the target entity
+      required: true
+      selector:
+        entity:
+          integration: samsungtv_smart
+    content_id:
+      name: Content ID
+      description: The content ID of the artwork
+      required: true
+      selector:
+        text:
+    filter_id:
+      name: Filter ID
+      description: Filter name to apply
+      required: true
+      example: "ink"
+      selector:
+        select:
+          options:
+            - "none"
+            - "mono"
+            - "original"
+            - "ink"
+            - "watercolor"
+            - "oil"
+            - "pastel"
+            - "posterize"
+            - "noir"
+            - "quartertone"
+
+art_get_photo_filter_list:
+  name: Get Photo Filter List
+  description: Get list of available photo filters.
+  fields:
+    entity_id:
+      name: Entity Name
+      description: Name of the target entity
+      required: true
+      selector:
+        entity:
+          integration: samsungtv_smart
+
+art_get_matte_list:
+  name: Get Matte List
+  description: Get list of available matte styles.
+  fields:
+    entity_id:
+      name: Entity Name
+      description: Name of the target entity
+      required: true
+      selector:
+        entity:
+          integration: samsungtv_smart
+
+art_set_favourite:
+  name: Set Favourite Status
+  description: Add or remove artwork from favourites.
+  fields:
+    entity_id:
+      name: Entity Name
+      description: Name of the target entity
+      required: true
+      selector:
+        entity:
+          integration: samsungtv_smart
+    content_id:
+      name: Content ID
+      description: The content ID of the artwork
+      required: true
+      selector:
+        text:
+    status:
+      name: Status
+      description: "'on' to add to favourites, 'off' to remove"
+      required: true
+      default: "on"
+      selector:
+        select:
+          options:
+            - "on"
+            - "off"
+
+art_set_slideshow:
+  name: Set Slideshow
+  description: Configure artwork slideshow settings.
+  fields:
+    entity_id:
+      name: Entity Name
+      description: Name of the target entity
+      required: true
+      selector:
+        entity:
+          integration: samsungtv_smart
+    duration:
+      name: Duration
+      description: Duration in minutes for each image (0 to disable)
+      required: true
+      example: 10
+      selector:
+        number:
+          min: 0
+          max: 1440
+          step: 1
+          unit_of_measurement: "min"
+    shuffle:
+      name: Shuffle
+      description: Enable shuffle mode
+      required: false
+      default: true
+      selector:
+        boolean:
+    category_id:
+      name: Category
+      description: Category number (2=My Photos, 4=Favorites, 8=Store)
+      required: false
+      default: 2
+      selector:
+        number:
+          min: 2
+          max: 8
+          step: 2
+
+art_set_auto_rotation:
+  name: Set Auto Rotation
+  description: Configure automatic artwork rotation settings.
+  fields:
+    entity_id:
+      name: Entity Name
+      description: Name of the target entity
+      required: true
+      selector:
+        entity:
+          integration: samsungtv_smart
+    duration:
+      name: Duration
+      description: Duration in minutes for each image (0 to disable)
+      required: true
+      example: 60
+      selector:
+        number:
+          min: 0
+          max: 1440
+          step: 1
+          unit_of_measurement: "min"
+    shuffle:
+      name: Shuffle
+      description: Enable shuffle mode
+      required: false
+      default: true
+      selector:
+        boolean:
+    category_id:
+      name: Category
+      description: Category number (2=My Photos, 4=Favorites, 8=Store)
+      required: false
+      default: 2
+      selector:
+        number:
+          min: 2
+          max: 8
+          step: 2
+

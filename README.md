@@ -26,6 +26,7 @@ I also added some code optimizition in the comunication layer using async aiohtt
 * Cast video URLs to Samsung TV
 * Connect to SmartThings Cloud API for additional features: see TV channel names, see which HDMI source is selected, more key codes to change input source
 * Display logos of TV channels (requires Smartthings enabled) and apps
+* **Frame TV Art Mode support**: Full control over Samsung Frame TV art features including artwork selection, slideshow, thumbnails, uploads, mattes, and more
 
 ![N|Solid](https://i.imgur.com/8mCGZoO.png)
 ![N|Solid](https://i.imgur.com/t3e4bJB.png)
@@ -577,6 +578,198 @@ service: samsungtv_smart.set_art_mode
   "entity_id": "media_player.samsungtv"
 }
 ```
+
+# Frame TV Art Mode
+
+For Samsung Frame TVs, this integration provides comprehensive Art Mode control through dedicated services and a sensor entity.
+
+**Note**: Frame Art Mode features require a Samsung Frame TV (2019 or later models recommended). A dedicated sensor `sensor.<tv_name>_frame_art` exposes all art-related attributes.
+
+### Frame Art Sensor Attributes
+
+The Frame Art sensor provides the following attributes:
+
+| Attribute | Description |
+|-----------|-------------|
+| `art_mode` | Current art mode status (on/off) |
+| `current_artwork` | Content ID of currently displayed artwork |
+| `content_type` | Type: `mobile` (personal) or `server` (Art Store) |
+| `category_id` | Current category |
+| `matte_id` | Current frame style |
+| `artwork_count` | Total number of artworks |
+| `slideshow_status` | Slideshow configuration |
+
+### Content Types
+
+| Prefix | Type | Description |
+|--------|------|-------------|
+| `MY_F*` | Personal | User-uploaded images |
+| `SAM-S*` | Art Store | Samsung Art Store (paid) |
+| `SAM-*` | Art Store | Samsung Art Store (free) |
+
+### Frame Art Services
+
+***Select Artwork***
+---------------
+Display a specific artwork on the Frame TV.
+
+```yaml
+service: samsungtv_smart.frame_art_set_artwork
+data:
+  entity_id: media_player.samsungtv
+  content_id: "MY_F0001"
+  category_id: "MY-C0004"  # Optional
+```
+
+***Get Artwork List***
+---------------
+Retrieve list of all available artworks. Results are logged and stored in sensor attributes.
+
+```yaml
+service: samsungtv_smart.frame_art_get_artwork_list
+data:
+  entity_id: media_player.samsungtv
+  category: "MY-C0004"  # Optional: filter by category
+```
+
+Common categories:
+- `MY-C0002` - My Photos
+- `MY-C0004` - Favorites
+- `MY-C0008` - All
+
+***Get Thumbnail***
+---------------
+Download artwork thumbnail. Saved to `/config/www/frame_art_thumbnails/`.
+
+```yaml
+service: samsungtv_smart.frame_art_get_thumbnail
+data:
+  entity_id: media_player.samsungtv
+  content_id: "MY_F0001"
+```
+
+**Note**: Thumbnails for Samsung Art Store images (SAM-S*) are DRM-protected and cannot be downloaded. Only personal images (MY_F*) are supported.
+
+***Upload Image***
+---------------
+Upload a custom image to the Frame TV.
+
+```yaml
+service: samsungtv_smart.frame_art_upload_image
+data:
+  entity_id: media_player.samsungtv
+  file_path: "/config/www/my_artwork.jpg"
+  matte: "shadowbox_black"
+  portrait_matte: "shadowbox_black"
+```
+
+Supported formats: PNG, JPG
+
+***Delete Image***
+---------------
+Delete an uploaded image from the Frame TV.
+
+```yaml
+service: samsungtv_smart.frame_art_delete_image
+data:
+  entity_id: media_player.samsungtv
+  content_id: "MY_F0001"
+```
+
+***Set Favorite***
+---------------
+Add or remove artwork from favorites.
+
+```yaml
+service: samsungtv_smart.frame_art_set_favorite
+data:
+  entity_id: media_player.samsungtv
+  content_id: "MY_F0001"
+  status: "on"  # or "off"
+```
+
+***Change Matte (Frame Style)***
+---------------
+Change the frame/matte style for an artwork.
+
+```yaml
+service: samsungtv_smart.frame_art_change_matte
+data:
+  entity_id: media_player.samsungtv
+  content_id: "MY_F0001"
+  matte_id: "flexible_black"
+  portrait_matte_id: "flexible_black"  # Optional
+```
+
+Available matte styles:
+- `none` - No frame
+- `shadowbox_polar` - White shadowbox
+- `shadowbox_black` - Black shadowbox
+- `flexible_polar` - White flexible
+- `flexible_black` - Black flexible
+- `modernthin_neutral` - Modern thin neutral
+- `modernthin_black` - Modern thin black
+
+***Set Photo Filter***
+---------------
+Apply a photo filter to an artwork.
+
+```yaml
+service: samsungtv_smart.frame_art_set_filter
+data:
+  entity_id: media_player.samsungtv
+  content_id: "MY_F0001"
+  filter_id: "filter_id_here"
+```
+
+***Configure Slideshow***
+---------------
+Set up automatic artwork rotation.
+
+```yaml
+service: samsungtv_smart.frame_art_set_slideshow
+data:
+  entity_id: media_player.samsungtv
+  duration: 15  # Minutes (0 = disabled)
+  shuffle: true
+  category: 4   # 2=My Photos, 4=Favorites
+```
+
+***Set Brightness***
+---------------
+Adjust Art Mode display brightness.
+
+```yaml
+service: samsungtv_smart.frame_art_set_brightness
+data:
+  entity_id: media_player.samsungtv
+  brightness: 50  # 0-100
+```
+
+**Note**: May not work on 2024+ models that use automatic brightness sensor.
+
+***Set Color Temperature***
+---------------
+Adjust Art Mode color temperature.
+
+```yaml
+service: samsungtv_smart.frame_art_set_color_temperature
+data:
+  entity_id: media_player.samsungtv
+  color_temperature: 50  # 0-100
+```
+
+### Frame Art Mode Known Limitations
+
+1. **Art Store Thumbnails**: Samsung Art Store images (SAM-S*) are DRM-protected. Thumbnail download only works for personal images (MY_F*).
+
+2. **Brightness Control**: The `set_brightness` service may not work on 2024+ Frame TV models as they use an automatic light sensor.
+
+3. **Network Requirements**: Frame Art API requires the TV and Home Assistant to be on the same VLAN.
+
+4. **Connection Timing**: Some operations use ephemeral ports that close quickly (~100-200ms). If you experience timeouts, retry the operation.
+
+For detailed API documentation, see [Frame Art API Documentation](docs/FRAME_ART_API_DOCUMENTATION.md).
 
 # Be kind!
 If you like the component, why don't you support me by buying me a coffe?

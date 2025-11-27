@@ -35,6 +35,7 @@ __min_ha_version__ = f"{MIN_HA_MAJ_VER}.{MIN_HA_MIN_VER}.0"
 DATA_CFG = "cfg"
 DATA_CFG_YAML = "cfg_yaml"
 DATA_OPTIONS = "options"
+DATA_ART_API = "art_api"  # Shared Frame Art API instance
 LOCAL_LOGO_PATH = "local_logo_path"
 WS_PREFIX = "[Home Assistant]"
 
@@ -94,6 +95,39 @@ RESULT_WRONG_APIKEY = "wrong_api_key"
 
 SERVICE_SELECT_PICTURE_MODE = "select_picture_mode"
 SERVICE_SET_ART_MODE = "set_art_mode"
+
+# Frame Art Extended Services
+SERVICE_ART_GET_ARTMODE = "art_get_artmode"
+SERVICE_ART_SET_ARTMODE = "art_set_artmode"
+SERVICE_ART_AVAILABLE = "art_available"
+SERVICE_ART_GET_CURRENT = "art_get_current"
+SERVICE_ART_SELECT_IMAGE = "art_select_image"
+SERVICE_ART_UPLOAD = "art_upload"
+SERVICE_ART_DELETE = "art_delete"
+SERVICE_ART_GET_THUMBNAIL = "art_get_thumbnail"
+SERVICE_ART_SET_BRIGHTNESS = "art_set_brightness"
+SERVICE_ART_GET_BRIGHTNESS = "art_get_brightness"
+SERVICE_ART_CHANGE_MATTE = "art_change_matte"
+SERVICE_ART_SET_PHOTO_FILTER = "art_set_photo_filter"
+SERVICE_ART_GET_PHOTO_FILTER_LIST = "art_get_photo_filter_list"
+SERVICE_ART_GET_MATTE_LIST = "art_get_matte_list"
+SERVICE_ART_SET_FAVOURITE = "art_set_favourite"
+SERVICE_ART_SET_SLIDESHOW = "art_set_slideshow"
+SERVICE_ART_SET_AUTO_ROTATION = "art_set_auto_rotation"
+
+# Frame Art Service Attributes
+ATTR_CONTENT_ID = "content_id"
+ATTR_CATEGORY_ID = "category_id"
+ATTR_FILE_PATH = "file_path"
+ATTR_FILE_TYPE = "file_type"
+ATTR_MATTE_ID = "matte_id"
+ATTR_FILTER_ID = "filter_id"
+ATTR_BRIGHTNESS = "brightness"
+ATTR_SHOW = "show"
+ATTR_DURATION = "duration"
+ATTR_SHUFFLE = "shuffle"
+ATTR_ENABLED = "enabled"
+ATTR_STATUS = "status"
 
 SIGNAL_CONFIG_ENTITY = f"{DOMAIN}_config"
 
