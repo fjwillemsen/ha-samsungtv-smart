@@ -11,6 +11,7 @@ from homeassistant.components.switch import SwitchEntity, SwitchDeviceClass
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     CONF_HOST,
+    CONF_ID,
     CONF_MAC,
     CONF_NAME,
     CONF_PORT,
@@ -63,7 +64,10 @@ async def async_setup_entry(
     port = config.get(CONF_PORT, DEFAULT_PORT)
     token = config.get(CONF_TOKEN)
     ws_name = config.get(CONF_WS_NAME, "HomeAssistant")
-    
+
+    # Get device unique ID - must match entity.py logic for device grouping
+    device_unique_id = config.get(CONF_ID, entry.entry_id)
+
     # Get device name from config or entry title, fallback to host
     device_name = config.get(CONF_NAME) or entry.title or host
     
@@ -93,6 +97,7 @@ async def async_setup_entry(
                     device_id=device_id,
                     device_name=device_name,
                     session=session,
+                    device_unique_id=device_unique_id,
                 )
             )
             _LOGGER.info("Power switch (SmartThings) created for %s", device_name)
@@ -132,11 +137,11 @@ async def async_setup_entry(
             # Store for later use
             hass.data[DOMAIN][entry.entry_id][DATA_ART_API] = art_api
             # Add Art Mode switch
-            entities.append(FrameArtModeSwitch(hass, entry, art_api, device_name, host))
+            entities.append(FrameArtModeSwitch(hass, entry, art_api, device_name, host, device_unique_id))
             _LOGGER.info("Frame Art Mode switch created for %s", device_name)
     else:
         # Art API exists, so Frame TV is supported
-        entities.append(FrameArtModeSwitch(hass, entry, art_api, device_name, host))
+        entities.append(FrameArtModeSwitch(hass, entry, art_api, device_name, host, device_unique_id))
         _LOGGER.info("Frame Art Mode switch created for %s", device_name)
     
     # Create the switch entities
@@ -159,6 +164,7 @@ class FrameArtModeSwitch(SwitchEntity):
         art_api: SamsungTVAsyncArt,
         device_name: str,
         host: str,
+        device_unique_id: str,
     ) -> None:
         """Initialize the Art Mode switch."""
         self._hass = hass
@@ -166,6 +172,7 @@ class FrameArtModeSwitch(SwitchEntity):
         self._art_api = art_api
         self._device_name = device_name
         self._host = host
+        self._device_unique_id = device_unique_id
         self._attr_unique_id = f"{entry.entry_id}_art_mode_switch"
         self._attr_is_on = None
         self._available = True
@@ -176,7 +183,7 @@ class FrameArtModeSwitch(SwitchEntity):
     def device_info(self) -> DeviceInfo:
         """Return device info to link this entity to the TV device."""
         return DeviceInfo(
-            identifiers={(DOMAIN, self._entry.entry_id)},
+            identifiers={(DOMAIN, self._device_unique_id)},
             name=self._device_name,
         )
 
@@ -438,6 +445,7 @@ class SamsungTVPowerSwitch(SwitchEntity):
         device_id: str,
         device_name: str,
         session,  # aiohttp session
+        device_unique_id: str,
     ) -> None:
         """Initialize the power switch."""
         self.hass = hass
@@ -445,10 +453,11 @@ class SamsungTVPowerSwitch(SwitchEntity):
         self._session = session
         self._device_id = device_id
         self._device_name = device_name
+        self._device_unique_id = device_unique_id
         self._attr_unique_id = f"{entry.entry_id}_power"
         self._attr_is_on = False
         self._available = True
-        
+
         # Command pending tracking to prevent state flicker
         self._last_command_time: float | None = None
         self._last_command_state: bool | None = None
@@ -484,10 +493,8 @@ class SamsungTVPowerSwitch(SwitchEntity):
     def device_info(self) -> DeviceInfo:
         """Return device info."""
         return DeviceInfo(
-            identifiers={(DOMAIN, self._entry.entry_id)},
+            identifiers={(DOMAIN, self._device_unique_id)},
             name=self._device_name,
-            manufacturer="Samsung",
-            model="Smart TV",
         )
 
     @property
