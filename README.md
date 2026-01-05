@@ -1,3 +1,5 @@
+**This is a fork of ha-samsungtv-smart by @TheFab21 with fixes by @chansearrington.**
+
 # Samsung TV Smart - Frame Art Edition
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
