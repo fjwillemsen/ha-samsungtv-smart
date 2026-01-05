@@ -1,4 +1,4 @@
-**This is a fork of ha-samsungtv-smart by @fjwillemsen with fixes by @chansearrington.**
+**This is a fork of ha-samsungtv-smart by @TheFab21 with fixes by @chansearrington and @fjwillemsen.**
 
 # Samsung TV Smart - Frame Art Edition
 
@@ -77,39 +77,32 @@ Complete control over your Samsung Frame TV's Art Mode:
 ## 🔐 OAuth2 Setup (Recommended)
 
 OAuth2 provides automatic token refresh, eliminating the need for manual PAT renewal.
+As of 2025/2026, the SmartThings Developer Workspace is deprecated and new projects can not be created. 
+Instead, the SmartThings CLI is the best way to obtain the required OAuth secret. 
 
 ### Step 1: Create SmartThings OAuth Application
+These steps can be followed on any device where you can log into your Samsung account.
 
-1. Go to [SmartThings Developer Workspace](https://smartthings.developer.samsung.com/workspace)
-2. Sign in with your Samsung account
-3. Click **New Project** → **Device Integration** → **SmartThings Cloud Connector**
-4. Name your project (e.g., "Home Assistant Integration")
-5. Go to **Develop** → **Registration** → **App Registration**
-6. Click **Create New**
-
-### Step 2: Configure OAuth Settings
-
-In the App Registration form:
-
-| Field | Value |
-|-------|-------|
-| **App Name** | Home Assistant Samsung TV |
-| **App Type** | Automation App |
-| **OAuth Scope** | `r:devices:*` and `x:devices:*` |
-| **Redirect URI** | `https://my.home-assistant.io/redirect/oauth` |
-
-7. Click **Save** and note your:
-   - **Client ID** (OAuth Client Id)
-   - **Client Secret** (OAuth Client Secret)
+1. Install the [SmartThings CLI](https://developer.smartthings.com/docs/sdks/cli/)
+2. Run `smartthings apps:create`.
+3. Follow the interactive instructions:
+   a. Display Name: Home Assistant Samsung TV
+   b. Description: For Home Assistant integration of Samsung The Frame TV
+   c. Icon Image URL: Can be left blank
+   d. Target URL: Can be left blank
+   e. Select Scopes: select `r:devices:*` and `x:devices:*`
+   f. Now select `Add Redirect URI`, and set it to `https://my.home-assistant.io/redirect/oauth`
+   g. Select `Finish and create OAuth-In SmartApp.`
+4. You can now see the details of the app and OAuth data, save these
 
 > ⚠️ **Important**: Use the "OAuth Client Id", NOT the "App Id"!
 
-### Step 3: Configure Home Assistant
+### Step 2: Configure Home Assistant
 
 Add your credentials to Home Assistant:
 
 **Option A: Via UI**
-1. Go to **Settings** → **Devices & Services** → **Application Credentials**
+1. Go to **Settings** → **Devices & Services** → **Application Credentials** (three dots in top right corner)
 2. Click **Add Credentials**
 3. Select **Samsung TV Smart**
 4. Enter your Client ID and Client Secret
@@ -123,13 +116,14 @@ application_credentials:
     client_secret: "YOUR_CLIENT_SECRET"
 ```
 
-### Step 4: Add Integration with OAuth
+### Step 3: Add Integration with OAuth
 
 1. Go to **Settings** → **Devices & Services**
 2. Click **Add Integration** → **Samsung TV Smart**
 3. Select **SmartThings OAuth** as authentication method
 4. Complete the OAuth flow in your browser
-5. Your TV should now appear with OAuth authentication
+5. If needed, the device ID can be found [here](https://my.smartthings.com/advanced/devices)
+6. Your TV should now appear with OAuth authentication
 
 ---
 
