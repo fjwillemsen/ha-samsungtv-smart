@@ -1,9 +1,9 @@
-**This is a fork of ha-samsungtv-smart by @TheFab21 with fixes by @chansearrington.**
+**This is a fork of ha-samsungtv-smart by @fjwillemsen with fixes by @chansearrington.**
 
 # Samsung TV Smart - Frame Art Edition
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
-[![GitHub Release](https://img.shields.io/github/release/TheFab21/ha-samsungtv-smart.svg)](https://github.com/TheFab21/ha-samsungtv-smart/releases)
+[![GitHub Release](https://img.shields.io/github/release/fjwillemsen/ha-samsungtv-smart.svg)](https://github.com/fjwillemsen/ha-samsungtv-smart/releases)
 
 📺 Home Assistant integration for Samsung Smart TVs with **enhanced Frame TV Art Mode support** and **OAuth2 authentication**.
 
@@ -60,7 +60,7 @@ Complete control over your Samsung Frame TV's Art Mode:
 1. Open HACS in Home Assistant
 2. Go to **Integrations**
 3. Click the three dots menu → **Custom repositories**
-4. Add: `https://github.com/TheFab21/ha-samsungtv-smart`
+4. Add: `https://github.com/fjwillemsen/ha-samsungtv-smart`
 5. Category: **Integration**
 6. Click **Add**
 7. Search for "Samsung TV Smart" and install
